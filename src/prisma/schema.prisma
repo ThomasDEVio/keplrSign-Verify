@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model marketplace {
+  id                   Int     @id @default(autoincrement())
+  type                 String  @db.VarChar(20)
+  title                String  @unique(map: "title") @db.VarChar(50)
+  description          String  @db.VarChar(5000)
+  image                String  @db.VarChar(500)
+  date                 String  @db.VarChar(50)
+  finish_time          String  @db.VarChar(50)
+  price                Int     @db.MediumInt
+  ticket_cap           Int     @db.MediumInt
+  currency             String  @db.VarChar(10)
+  winner               String  @db.Text
+  multiple_winners     Int?    @db.SmallInt
+  tickets_bought       String  @db.LongText
+  extra_raffle_details String? @db.LongText
+}
+
+model purchases {
+  id                      Int     @id @default(autoincrement())
+  type                    String  @db.VarChar(20)
+  title                   String? @db.VarChar(50)
+  amount                  Int     @db.SmallInt
+  image                   String  @db.VarChar(500)
+  date                    String  @db.VarChar(50)
+  price                   Int     @db.MediumInt
+  currency                String  @db.VarChar(10)
+  wallet                  String  @db.VarChar(50)
+  purchases_extra_details String? @db.LongText
+}
+
+model nfts {
+  id                     Int     @id @default(autoincrement())
+  name                   String? @db.VarChar(50)
+  collection             String  @db.TinyText
+  token_id               Int?    @db.SmallInt
+  nft_metadata_number    Int     @db.SmallInt
+  staked                 Boolean @default(false)
+  points_balance         Int     @default(0) @db.UnsignedMediumInt
+  special_points_balance Int     @default(0) @db.UnsignedMediumInt
+  wallet                 String  @db.VarChar(50)
+  latest_change          String? @db.VarChar(100)
+  date_staked            String? @db.VarChar(30)
+  points_earned          Int     @default(0) @db.UnsignedMediumInt
+  points_spent           Int     @default(0) @db.UnsignedMediumInt
+  points_per_period      Int     @default(0) @db.UnsignedTinyInt
+  points_cap             Int     @default(0) @db.UnsignedMediumInt
+  nft_status             String? @db.VarChar(20)
+
+  @@index([token_id], map: "token_id")
+}
+
+model logs {
+  id          Int      @id @default(autoincrement())
+  log_type    String   @db.VarChar(50)
+  log_message String   @db.VarChar(5000)
+  log_data    Json?
+  log_time    DateTime @default(now()) @db.Timestamp(0)
+}
+
+model burned {
+  id               Int      @id @default(autoincrement())
+  wallet           String   @unique(map: "wallet") @db.VarChar(50)
+  points_burned    Int
+  latest_burn_date DateTime @default(now()) @db.Timestamp(0)
+}
+
+model ads {
+  id               Int     @id @default(autoincrement())
+  type             String  @db.VarChar(20)
+  title            String  @unique(map: "title") @db.VarChar(50)
+  description      String  @db.VarChar(5000)
+  image            String  @db.VarChar(500)
+  currency         String  @db.VarChar(10)
+  extra_ad_details String? @db.LongText
+}
